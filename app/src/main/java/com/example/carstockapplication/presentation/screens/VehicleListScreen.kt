@@ -27,20 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.carstockapplication.domain.model.Vehicle
 import com.example.carstockapplication.presentation.viewmodel.VehicleViewModel
+import com.example.carstockapplication.ui.theme.AccentGold
+import com.example.carstockapplication.ui.theme.AccentOrange
+import com.example.carstockapplication.ui.theme.Background
+import com.example.carstockapplication.ui.theme.BorderColor
+import com.example.carstockapplication.ui.theme.StatusGreen
+import com.example.carstockapplication.ui.theme.StatusRed
+import com.example.carstockapplication.ui.theme.StatusYellow
+import com.example.carstockapplication.ui.theme.Surface1
+import com.example.carstockapplication.ui.theme.Surface2
+import com.example.carstockapplication.ui.theme.TextMuted
+import com.example.carstockapplication.ui.theme.TextPrimary
 import kotlin.collections.emptyList
-
-// ── Paleta (mesma do Login) ────────────────────────────────────────────────────
-private val Background   = Color(0xFF0A0A0F)
-private val Surface1     = Color(0xFF13131A)
-private val Surface2     = Color(0xFF1C1C26)
-private val AccentOrange = Color(0xFFFF6B2B)
-private val AccentGold   = Color(0xFFFFB547)
-private val TextPrimary  = Color(0xFFF0F0F5)
-private val TextMuted    = Color(0xFF6B6B80)
-private val BorderColor  = Color(0xFF2A2A38)
-private val StatusGreen  = Color(0xFF2ECC71)
-private val StatusRed    = Color(0xFFE74C3C)
-private val StatusYellow = Color(0xFFF39C12)
 
 @Composable
 fun VehicleListScreen(viewModel: VehicleViewModel) {

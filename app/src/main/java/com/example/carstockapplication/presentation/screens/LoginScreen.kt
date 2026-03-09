@@ -29,16 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.carstockapplication.presentation.viewmodel.AuthViewModel
-
-// ── Paleta ────────────────────────────────────────────────────────────────────
-private val Background   = Color(0xFF0A0A0F)
-private val Surface1     = Color(0xFF13131A)
-private val Surface2     = Color(0xFF1C1C26)
-private val AccentOrange = Color(0xFFFF6B2B)
-private val AccentGold   = Color(0xFFFFB547)
-private val TextPrimary  = Color(0xFFF0F0F5)
-private val TextMuted    = Color(0xFF6B6B80)
-private val BorderColor  = Color(0xFF2A2A38)
+import com.example.carstockapplication.ui.theme.*
 
 @Composable
 fun LoginScreen(
