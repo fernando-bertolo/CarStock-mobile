@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.carstockapplication.presentation.viewmodel.AuthViewModel
@@ -50,6 +51,35 @@ fun LoginScreen(
     LaunchedEffect(loginSuccess) {
         if (loginSuccess) onLoginSuccess()
     }
+
+    LoginContent(
+        email = email,
+        password = password,
+        passwordVisible = passwordVisible,
+        isLoading = isLoading,
+        error = error,
+        onEmailChange = { email = it },
+        onPasswordChange = { password = it },
+        onPasswordVisibleChange = { passwordVisible = !passwordVisible },
+        onLoginClick = { viewModel.login(email, password) }
+    );
+
+}
+
+@Composable
+fun LoginContent(
+    email: String,
+    password: String,
+    passwordVisible: Boolean,
+    isLoading: Boolean,
+    error: String?,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onPasswordVisibleChange: () -> Unit,
+    onLoginClick: () -> Unit
+) {
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { visible = true }
 
     Box(
         modifier = Modifier
@@ -164,7 +194,7 @@ fun LoginScreen(
                     // Email
                     StyledTextField(
                         value = email,
-                        onValueChange = { email = it },
+                        onValueChange = onEmailChange,
                         label = "E-mail",
                         leadingIcon = {
                             Icon(Icons.Default.Email, contentDescription = null, tint = TextMuted, modifier = Modifier.size(18.dp))
@@ -177,7 +207,7 @@ fun LoginScreen(
                     // Senha
                     StyledTextField(
                         value = password,
-                        onValueChange = { password = it },
+                        onValueChange = onPasswordChange,
                         label = "Senha",
                         leadingIcon = {
                             Icon(Icons.Default.Lock, contentDescription = null, tint = TextMuted, modifier = Modifier.size(18.dp))
@@ -185,7 +215,7 @@ fun LoginScreen(
                         keyboardType = KeyboardType.Password,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            IconButton(onClick = onPasswordVisibleChange) {
                                 Icon(
                                     if (passwordVisible) Icons.Default.Lock else Icons.Default.Check,
                                     contentDescription = null,
@@ -210,7 +240,7 @@ fun LoginScreen(
 
                     // Botão entrar
                     Button(
-                        onClick = { viewModel.login(email, password) },
+                        onClick = onLoginClick,
                         enabled = !isLoading && email.isNotBlank() && password.isNotBlank(),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -261,7 +291,7 @@ fun LoginScreen(
                 enter = fadeIn(tween(800, delayMillis = 400))
             ) {
                 Text(
-                    text = "CarStock © 2025",
+                    text = "CarStock © 2026",
                     color = TextMuted.copy(alpha = 0.5f),
                     fontSize = 11.sp,
                     textAlign = TextAlign.Center
@@ -270,6 +300,24 @@ fun LoginScreen(
         }
     }
 }
+
+
+@Preview
+@Composable
+fun LoginPreview() {
+    LoginContent(
+        email = "teste@email.com",
+        password = "123456",
+        passwordVisible = false,
+        isLoading = false,
+        error = null,
+        onEmailChange = {},
+        onPasswordChange = {},
+        onPasswordVisibleChange = {},
+        onLoginClick = {}
+    )
+}
+
 
 @Composable
 private fun StyledTextField(

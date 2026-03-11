@@ -156,9 +156,10 @@ fun VehicleListContent(
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
 
-            Box( modifier = Modifier.fillMaxWidth()) {
+            Box( modifier = Modifier
+                .padding(vertical = 20.dp)
+                .fillMaxWidth()) {
                 ButtonCreateVehicle(modifier = Modifier.align(Alignment.TopEnd))
             }
 
