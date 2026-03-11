@@ -1,5 +1,6 @@
 package com.example.carstockapplication.presentation.screens
 
+import android.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.carstockapplication.domain.model.Vehicle
@@ -47,11 +50,31 @@ fun VehicleListScreen(viewModel: VehicleViewModel) {
     val vehicles = pageable?.content ?: emptyList()
     val isLoading by viewModel.isLoading.observeAsState(false)
     val error by viewModel.error.observeAsState(null)
+
+    VehicleListContent(
+        vehicles = vehicles,
+        isLoading = isLoading,
+        error = error,
+        totalElements = pageable?.metadata?.totalElements,
+        onRetry = { viewModel.loadVehicles() }
+    )
+
+}
+
+
+@Composable
+fun VehicleListContent(
+    vehicles: List<Vehicle>,
+    isLoading: Boolean,
+    error: String?,
+    totalElements: Int?,
+    onRetry: () -> Unit
+) {
     var visible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         visible = true
-        viewModel.loadVehicles()
+        onRetry()
     }
 
     Box(
@@ -115,7 +138,7 @@ fun VehicleListScreen(viewModel: VehicleViewModel) {
                                     .padding(horizontal = 12.dp, vertical = 6.dp)
                             ) {
                                 Text(
-                                    text = "${pageable?.metadata?.totalElements} veíc.",
+                                    text = "${totalElements} veíc.",
                                     color = AccentOrange,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold
@@ -134,6 +157,10 @@ fun VehicleListScreen(viewModel: VehicleViewModel) {
             }
 
             Spacer(Modifier.height(20.dp))
+
+            Box( modifier = Modifier.fillMaxWidth()) {
+                ButtonCreateVehicle(modifier = Modifier.align(Alignment.TopEnd))
+            }
 
             // ── Estados ───────────────────────────────────────────────────
             when {
@@ -162,7 +189,7 @@ fun VehicleListScreen(viewModel: VehicleViewModel) {
                             Text(error ?: "", color = TextMuted, fontSize = 12.sp)
                             Spacer(Modifier.height(16.dp))
                             Button(
-                                onClick = { viewModel.loadVehicles() },
+                                onClick = { onRetry() },
                                 colors = ButtonDefaults.buttonColors(containerColor = AccentOrange),
                                 shape = RoundedCornerShape(10.dp)
                             ) {
@@ -290,6 +317,34 @@ private fun VehicleCard(vehicle: Vehicle) {
             )
         }
     }
+}
+
+@Composable
+private fun ButtonCreateVehicle(modifier: Modifier = Modifier) {
+    Button(
+        onClick = {},
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(containerColor = AccentOrange),
+        shape = RoundedCornerShape(10.dp)
+    ) {
+        Text("Cadastrar Veículo")
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun VehiclePreview() {
+    VehicleListContent(
+        vehicles = listOf(
+            Vehicle(name = "Corolla", brandName = "Toyota", brandId = "qsdasdasd", modelName = "Corolla", modelId = "qdassd", versionName = "XEI", versionId = "12312312", id = "123123", modelYear = 2010, manufacturerYear = 2010, color = "Branco", status = "AVAILABLE", chassis = "ASDASDASD", mileage = 190, fuelType = "GASOLINE", costPrice = 28.000, salePrice = 30.000, entryDate = "", optionals = emptyList(), licensePlate = "EAJ-5D-21"),
+            Vehicle(name = "Corolla", brandName = "Toyota", brandId = "qsdasdasd", modelName = "Corolla", modelId = "qdassd", versionName = "XEI", versionId = "12312312", id = "123123", modelYear = 2010, manufacturerYear = 2010, color = "Branco", status = "AVAILABLE", chassis = "ASDASDASD", mileage = 190, fuelType = "GASOLINE", costPrice = 28.000, salePrice = 30.000, entryDate = "", optionals = emptyList(), licensePlate = "EAJ-5D-21"),
+        ),
+        onRetry = {},
+        totalElements = 10,
+        error = null,
+        isLoading = false
+    )
 }
 
 private fun formatPrice(price: Double): String {
