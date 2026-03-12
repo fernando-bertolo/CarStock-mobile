@@ -1,6 +1,5 @@
 package com.example.carstockapplication.presentation.screens
 
-import android.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -44,7 +43,7 @@ import com.example.carstockapplication.ui.theme.TextPrimary
 import kotlin.collections.emptyList
 
 @Composable
-fun VehicleListScreen(viewModel: VehicleViewModel) {
+fun VehicleListScreen(viewModel: VehicleViewModel, createVehicle: () -> Unit) {
 
     val pageable by viewModel.vehicles.observeAsState(null)
     val vehicles = pageable?.content ?: emptyList()
@@ -56,7 +55,8 @@ fun VehicleListScreen(viewModel: VehicleViewModel) {
         isLoading = isLoading,
         error = error,
         totalElements = pageable?.metadata?.totalElements,
-        onRetry = { viewModel.loadVehicles() }
+        onRetry = { viewModel.loadVehicles() },
+        createVehicle
     )
 
 }
@@ -68,7 +68,8 @@ fun VehicleListContent(
     isLoading: Boolean,
     error: String?,
     totalElements: Int?,
-    onRetry: () -> Unit
+    onRetry: () -> Unit,
+    createVehicle: () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
 
@@ -160,7 +161,7 @@ fun VehicleListContent(
             Box( modifier = Modifier
                 .padding(vertical = 20.dp)
                 .fillMaxWidth()) {
-                ButtonCreateVehicle(modifier = Modifier.align(Alignment.TopEnd))
+                ButtonCreateVehicle(modifier = Modifier.align(Alignment.TopEnd), createVehicle)
             }
 
             // ── Estados ───────────────────────────────────────────────────
@@ -321,9 +322,9 @@ private fun VehicleCard(vehicle: Vehicle) {
 }
 
 @Composable
-private fun ButtonCreateVehicle(modifier: Modifier = Modifier) {
+private fun ButtonCreateVehicle(modifier: Modifier = Modifier, createVehicle: () -> Unit) {
     Button(
-        onClick = {},
+        onClick = createVehicle,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(containerColor = AccentOrange),
         shape = RoundedCornerShape(10.dp)
@@ -344,7 +345,8 @@ fun VehiclePreview() {
         onRetry = {},
         totalElements = 10,
         error = null,
-        isLoading = false
+        isLoading = false,
+        createVehicle = {}
     )
 }
 

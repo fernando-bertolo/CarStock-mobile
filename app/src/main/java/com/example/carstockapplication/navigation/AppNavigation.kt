@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.carstockapplication.presentation.screens.LoginScreen
+import com.example.carstockapplication.presentation.screens.NewVehicleScreen
 import com.example.carstockapplication.presentation.screens.VehicleListScreen
 
 @Composable
@@ -28,7 +29,16 @@ fun AppNavigation() {
         }
 
         composable("vehicles") {
-            VehicleListScreen(viewModel = hiltViewModel())
+            VehicleListScreen(
+                viewModel = hiltViewModel(),
+                createVehicle = {
+                    navController.navigate("vehicles/new")
+                }
+            )
+        }
+
+        composable("vehicles/new") {
+            NewVehicleScreen(viewModel = hiltViewModel())
         }
     }
 }
